@@ -7,7 +7,7 @@ export default function DeleteConfirmationDialog({ open, onClose, onConfirm, pro
       <DialogContent>Are you sure you want to delete "{productTitle}"?</DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-        <Button color="secondary" onClick={onConfirm}>Delete</Button>
+        <Button color="error" onClick={onConfirm}>Delete</Button>
       </DialogActions>
     </Dialog>
   );

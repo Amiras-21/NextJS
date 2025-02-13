@@ -5,7 +5,7 @@ export default function ProductCard({ product, onEdit, onDelete }) {
     <Paper className="p-4 w-full max-w-sm">
       <div className="flex justify-between">
         <Button onClick={() => onEdit(product)}>Update</Button>
-        <Button color="secondary" onClick={() => onDelete(product)}>Delete</Button>
+        <Button color="error" onClick={() => onDelete(product)}>Delete</Button>
       </div>
       <Typography variant="h6">{product.title}</Typography>
       
