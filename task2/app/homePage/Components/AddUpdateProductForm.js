@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { TextField, Button, Paper, Typography } from "@mui/material";
+import { useState, useEffect } from "react";
+import { TextField, Button, Paper, Typography, Skeleton } from "@mui/material";
 
-export default function AddUpdateProductForm({ onAddProduct, onClose, initialProduct = {} }) {
+export default function AddUpdateProductForm({ onAddProduct, onClose, initialProduct = {}, loading = false }) {
   const [product, setProduct] = useState({
     title: initialProduct.title || "",
     price: initialProduct.price || "",
@@ -33,30 +33,59 @@ export default function AddUpdateProductForm({ onAddProduct, onClose, initialPro
 
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-    <Paper className="p-6 max-w-md mx-auto">
-      <Typography variant="h6">{initialProduct.title ? "Update Product" : "Add Product"}</Typography>
+      <Paper className="p-6 max-w-md mx-auto">
+        <Typography variant="h6">{initialProduct.title ? "Update Product" : "Add Product"}</Typography>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <TextField fullWidth label="Title" name="title" value={product.title} onChange={handleChange} required />
-        <TextField fullWidth label="Price" name="price" type="number" value={product.price} onChange={handleChange} required />
-        <TextField fullWidth label="Description" name="description" multiline rows={3} value={product.description} onChange={handleChange} required />
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {loading ? (
+            <Skeleton variant="rectangular" height={56} />
+          ) : (
+            <TextField fullWidth label="Title" name="title" value={product.title} onChange={handleChange} required />
+          )}
 
-        
-        <input type="file" accept="image/*" onChange={handleImageChange} />
+          {loading ? (
+            <Skeleton variant="rectangular" height={56} />
+          ) : (
+            <TextField fullWidth label="Price" name="price" type="number" value={product.price} onChange={handleChange} required />
+          )}
 
-        
-        {preview && <img src={preview} alt="Preview" className="w-full h-40 object-contain mt-2" />}
+          {loading ? (
+            <Skeleton variant="rectangular" height={90} />
+          ) : (
+            <TextField fullWidth label="Description" name="description" multiline rows={3} value={product.description} onChange={handleChange} required />
+          )}
 
-        <div className="flex justify-between">
-          <Button type="submit" variant="contained" color="primary">
-            {initialProduct.title ? "Update" : "Add"}
-          </Button>
-          <Button onClick={onClose} variant="outlined">
-            Cancel
-          </Button>
-        </div>
-      </form>
-    </Paper>
+          {loading ? (
+            <Skeleton variant="rectangular" height={40} width={150} />
+          ) : (
+            <input type="file" accept="image/*" onChange={handleImageChange} />
+          )}
+
+          {loading ? (
+            <Skeleton variant="rectangular" height={160} />
+          ) : (
+            preview && <img src={preview} alt="Preview" className="w-full h-40 object-contain mt-2" />
+          )}
+
+          <div className="flex justify-between">
+            {loading ? (
+              <>
+                <Skeleton variant="rectangular" width={120} height={40} />
+                <Skeleton variant="rectangular" width={120} height={40} />
+              </>
+            ) : (
+              <>
+                <Button type="submit" variant="contained" color="primary">
+                  {initialProduct.title ? "Update" : "Add"}
+                </Button>
+                <Button onClick={onClose} variant="outlined">
+                  Cancel
+                </Button>
+              </>
+            )}
+          </div>
+        </form>
+      </Paper>
     </div>
   );
 }

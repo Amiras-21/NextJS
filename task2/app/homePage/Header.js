@@ -6,6 +6,7 @@ import { Select, MenuItem, Button } from "@mui/material";
 import AddUpdateProductForm from "./Components/AddUpdateProductForm";
 import ProductList from "./Components/ProductList";
 import DeleteConfirmationDialog from "./Components/DeleteConfirmationDialog";
+import Skeleton from '@mui/material/Skeleton';
 
 export default function Header() {
   const [displayValue, setDisplayValue] = useState("");
@@ -14,8 +15,10 @@ export default function Header() {
   const [showForm, setShowForm] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [productToDelete, setProductToDelete] = useState(null);
+  const [loading , setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(false);
     axios
       .get("https://fakestoreapi.com/products/categories")
       .then((response) => setCategories(response.data))
@@ -23,6 +26,7 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
+   
     if (displayValue) {
       axios
         .get(`https://fakestoreapi.com/products/category/${displayValue}`)
@@ -70,8 +74,17 @@ export default function Header() {
   return (
     <div>
       <header className="bg-blue-600 text-white p-4 flex justify-between items-center">
-        <h1 className="text-xl font-bold">Amiras</h1>
+        {loading ? (<Skeleton variant="text" width={100} sx={{ fontSize: '1rem' }}/> ) : (
+        <h1 className="text-xl font-bold">Amiras</h1> )}
         <div className="flex space-x-4">
+          {loading ? (
+            <>
+             <Skeleton variant="rectangular" width={150} height={40} />
+             <Skeleton variant="rectangular" width={120} height={40} />
+             </>
+          ) : (
+           <>
+
           <Select
             value={displayValue}
             onChange={(e) => setDisplayValue(e.target.value)}
@@ -87,6 +100,7 @@ export default function Header() {
               </MenuItem>
             ))}
           </Select>
+          
           <Button
             variant="contained"
             onClick={() => {
@@ -96,6 +110,8 @@ export default function Header() {
           >
             {showForm ? "Hide Form" : "Add Product"}
           </Button>
+          </>
+          )}
         </div>
       </header>
 
